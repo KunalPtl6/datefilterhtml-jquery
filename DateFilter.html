@@ -1,0 +1,359 @@
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DateFilter</title>
+    <script src="../DateFilterPage/jquery-1.10.2.js" type="text/javascript"></script>
+</head>
+<body>    
+<div class="form-group top-date clearfix">
+        <div class="col-md-2 col-sm-3 no-padd">
+            <label class="pull-left">Dates</label>
+            <div class="select-style">
+                <select id="selectDates" onchange="FillDate()">
+                    <option value="1" selected>All</option>
+                    <option value="2">Today</option>
+                    <option value="3">This Week</option>
+                    <option value="4">This Week-to-date</option>
+                    <option value="5">This Month</option>
+                    <option value="6">This Month-to-date</option>
+                    <option value="7">This Fiscal Quarter</option>
+                    <option value="8">This Fiscal Quarter-to-date</option>
+                    <option value="9">This Fiscal Year</option>
+                    <option value="10">This Fiscal Year-to-LastMonth</option>
+                    <option value="11">This Fiscal Year-to-Date</option>
+                    <option value="12">Yesterday</option>
+                    <option value="13">Last Week</option>
+                    <option value="14">Last Week-to-date</option>
+                    <option value="15">Last Month</option>
+                    <option value="16">Last Month-to-date</option>
+                    <option value="17">Last Fiscal Quarter</option>
+                    <option value="18">Last Fiscal Quarter-to-date</option>
+                    <option value="19">Last Fiscal Year</option>
+                    <option value="20">Last Fiscal Year-to-Date</option>
+                    <option value="21">Next Week</option>
+                    <option value="22">Next 4 Weeks</option>
+                    <option value="23">Next Month</option>
+                    <option value="24">Next Fiscal Quarter</option>
+                    <option value="25">Next Fiscal Year</option>
+                    <option value="26">Custom</option>
+                </select>
+            </div>
+        </div>
+<br />
+
+<br />
+        <div class="col-md-4 col-sm-6">
+            <div class="input-group input-large" data-date="13/07/2013" data-date-format="dd/mm/yyyy">
+                <span class="input-group-addon">From</span>
+                <input type="text" id="txtDateFrom" class="form-control dpd1" name="from">
+                <span class="input-group-addon">To</span>
+                <input type="text" id="txtDateTo" class="form-control dpd2" name="to">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        function FillDate() {
+            var dropValue = document.getElementById('selectDates').value;
+            //All
+            if (dropValue == "1") {
+                $('#txtDateFrom').val('');
+                $('#txtDateTo').val('');
+            }
+                //Today
+            else if (dropValue == "2") {
+                var back_GTM = new Date();
+                $('#txtDateFrom').val(Back_date(back_GTM));
+                $('#txtDateTo').val(Back_date(back_GTM));
+                
+            }
+                //This Week
+            else if (dropValue == "3") {
+                var curr = new Date; // get current date
+                var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+                var last = first + 6; // last day is the first day + 6
+
+                var firstday = new Date(curr.setDate(first));
+                var lastday = new Date(curr.setDate(last));
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //This Week-to-date
+            else if (dropValue == "4") {
+                var curr = new Date; // get current date
+                var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+                var last = first + 6; // last day is the first day + 6
+
+                var firstday = new Date(curr.setDate(first));
+                var lastday = new Date();
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //This Month
+            else if (dropValue == "5") {
+                var date = new Date();
+                var firstday = new Date(date.getFullYear(), date.getMonth(), 1);
+                var lastday = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //This Month-to-date
+            else if (dropValue == "6") {
+                var date = new Date();
+                var firstday = new Date(date.getFullYear(), date.getMonth(), 1);
+                var lastday = new Date();
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //This Fiscal Quarter
+            else if (dropValue == "7") {
+                var d = new Date();
+                var quarter = Math.floor((d.getMonth() / 3));
+
+                var firstday = new Date(d.getFullYear(), quarter * 3, 1);
+                var lastday = new Date(firstday.getFullYear(), firstday.getMonth() + 3, 0);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //This Fiscal Quarter-to-date
+            else if (dropValue == "8") {
+                var d = new Date();
+                var quarter = Math.floor((d.getMonth() / 3));
+
+                var firstday = new Date(d.getFullYear(), quarter * 3, 1);
+                var lastday = new Date();
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //This Fiscal Year
+            else if (dropValue == "9") {
+                var firstday = new Date(new Date().getFullYear(), 0, 1);
+                var lastday = new Date(new Date().getFullYear(), 11, 31);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //This Fiscal Year-to-LastMonth
+            else if (dropValue == "10") {
+                var d = new Date(); // current date
+
+                var firstday = new Date(new Date().getFullYear(), 0, 1);
+                var lastday = new Date(d.setDate(0));
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //This Fiscal Year-to-Date
+            else if (dropValue == "11") {
+                var firstday = new Date(new Date().getFullYear(), 0, 1);
+                var lastday = new Date();
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Yesterday
+            else if (dropValue == "12") {
+                var todayTimeStamp = +new Date; // Unix timestamp in milliseconds
+                var oneDayTimeStamp = 1000 * 60 * 60 * 24; // Milliseconds in a day
+                var diff = todayTimeStamp - oneDayTimeStamp;
+
+                var firstday = new Date(diff);
+                var lastday = new Date(diff);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Last Week
+            else if (dropValue == "13") {
+                var d = new Date();
+                var to = d.setTime(d.getTime() - (d.getDay() ? d.getDay() : 7) * 24 * 60 * 60 * 1000);
+                var from = d.setTime(d.getTime() - 6 * 24 * 60 * 60 * 1000);
+
+                var firstday = new Date(from);
+                var lastday = new Date(to);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Last Week-to-date
+            else if (dropValue == "14") {
+                var d = new Date();
+                var to = d.setTime(d.getTime() - (d.getDay() ? d.getDay() : 7) * 24 * 60 * 60 * 1000);
+                var from = d.setTime(d.getTime() - 6 * 24 * 60 * 60 * 1000);
+
+                var firstday = new Date(from);
+                var lastday = new Date();
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Last Month
+            else if (dropValue == "15") {
+                var x = new Date();
+                x.setDate(1);
+                x.setMonth(x.getMonth() - 1);
+                var firstday = new Date(x);
+
+                var date = new Date();
+                var lastday = new Date(date.getFullYear(), date.getMonth(), 0);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Last Month-to-date
+            else if (dropValue == "16") {
+                var x = new Date();
+                x.setDate(1);
+                x.setMonth(x.getMonth() - 1);
+
+                var firstday = new Date(x);
+                var lastday = new Date();
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Last Fiscal Quarter
+            else if (dropValue == "17") {
+                var d = new Date();
+                var quarter = Math.floor((d.getMonth() / 3));
+
+                var firstday = new Date(d.getFullYear(), quarter * 3 - 2, 1);
+                var lastday = new Date(firstday.getFullYear(), firstday.getMonth() + 3, 0);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Last Fiscal Quarter-to-date
+            else if (dropValue == "18") {
+                var d = new Date();
+                var quarter = Math.floor((d.getMonth() / 3));
+
+                var firstday = new Date(d.getFullYear(), quarter * 3 - 2, 1);
+                var lastday = new Date();
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Last Fiscal Year
+            else if (dropValue == "19") {
+                var firstday = new Date(new Date().getFullYear() - 1, 0, 1);
+                var lastday = new Date(firstday.getFullYear(), 11, 31)
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Last Fiscal Year-to-Date
+            else if (dropValue == "20") {
+                var firstday = new Date(new Date().getFullYear() - 1, 0, 1);
+                var lastday = new Date();
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Next Week
+            else if (dropValue == "21") {
+                var td = new Date();
+                var firstday = new Date(td.getFullYear(), td.getMonth(), td.getDate() + (7 - td.getDay()))
+                var last = td.setTime(firstday.getTime() + (6 * 24 * 60 * 60 * 1000));
+                var lastday = new Date(last);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Next 4 Weeks
+            else if (dropValue == "22") {
+                var d = new Date();
+                var to = d.setTime(d.getTime() - (d.getDay() ? d.getDay() : 7) * 24 * 60 * 60 * 1000);
+                var from = d.setTime(d.getTime() + (27 * 24 * 60 * 60 * 1000));
+
+                var firstday = new Date(to);
+                var lastday = new Date(from);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Next Month
+            else if (dropValue == "23") {
+                var x = new Date();
+                x.setDate(1);
+                x.setMonth(x.getMonth() + 1);
+                var firstday = new Date(x);
+
+                var date = new Date();
+                var lastday = new Date(firstday.getFullYear(), firstday.getMonth() + 1, 0);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Next Fiscal Quarter
+            else if (dropValue == "24") {
+                var d = new Date();
+                var quarter = Math.floor((d.getMonth() / 3)) + 1;
+
+                var firstday = new Date(d.getFullYear(), quarter * 3, 1);
+                var lastday = new Date(firstday.getFullYear(), firstday.getMonth() + 3, 0);
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Next Fiscal Year
+            else if (dropValue == "25") {
+                var firstday = new Date(new Date().getFullYear() + 1, 0, 1);
+                var lastday = new Date(firstday.getFullYear(), 11, 31)
+
+                $('#txtDateFrom').val(Back_date(firstday));
+                $('#txtDateTo').val(Back_date(lastday));
+                
+            }
+                //Custom
+            else if (dropValue == "26") {
+                $('#txtDateFrom').val('');
+                $('#txtDateFrom').focus();
+                $('#txtDateTo').val('');
+            }
+        }
+
+        function Back_date(back_GTM) {
+            var b_dd = back_GTM.getDate();
+            var b_mm = back_GTM.getMonth() + 1;
+            var b_yyyy = back_GTM.getFullYear();
+            if (b_dd < 10) {
+                b_dd = '0' + b_dd
+            }
+            if (b_mm < 10) {
+                b_mm = '0' + b_mm
+            }
+            return back_date = b_dd + '/' + b_mm + '/' + b_yyyy;
+        }
+    </script>
+</body>
+</html>
